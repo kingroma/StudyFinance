@@ -35,4 +35,10 @@ public class JongMokService {
 		
 		return map ; 
 	}
+	
+//	public static String getName(String code){
+//		if ( map.size() == 0 ) { 
+//			//init();
+//		}
+//	}
 }

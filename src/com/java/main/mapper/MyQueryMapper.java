@@ -18,7 +18,7 @@ public class MyQueryMapper {
 		try {
 			if ( q != null && entity != null ) { 
 				
-				if ( q.indexOf("{") > 0 ) { 
+				while ( q.indexOf("{") > 0 ) { 
 					String str = q.substring( q.indexOf("{") , q.indexOf("}")+1 );
 					String key = str.replace("{", "").replace("}","").trim();
 					String methodName = "get" + key.toUpperCase().charAt(0) + key.substring(1,key.length());
@@ -37,7 +37,6 @@ public class MyQueryMapper {
 					}
 					
 					q = q.replace(str, replace);
-					
 				}
 				
 				result = q ; 
