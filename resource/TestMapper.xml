@@ -1,0 +1,5 @@
+<Gambling>
+	<select id="list">
+		SELECT * FROM GAMBLING
+	</select>
+</Gambling>

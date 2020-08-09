@@ -1,22 +1,19 @@
 package com.java.main.main;
 
-import java.util.Map;
+import java.sql.Connection;
 
-import com.java.main.service.JongMokService;
+import com.java.main.database.MyConnection;
+import com.java.main.domain.Gambling;
 
 public class Main {
-	// https://marketdata.krx.co.kr/mdi#document=040602
 	public static void main(String[] args) {
-		String url = "https://mvnasdasd";
-		String path ="C:\\Users\\kingrome\\Desktop\\study\\StudyFinance\\data\\data_20200802.xls";
+//		ResentDataThread rdt = new ResentDataThread("005930");
+//		rdt.start();
+//		MyXmlMapperReader;
+		Gambling g = new Gambling();
+		g.setDate("99991231");
 		
-		try {
-			Map<String,String> map = JongMokService.init(path);
-			System.out.println(map.size());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
+		Connection connection = MyConnection.getConnection();
 	}
 
 }

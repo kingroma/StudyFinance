@@ -1,12 +1,9 @@
 package com.java.main.service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
-import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -14,9 +11,9 @@ import org.apache.poi.ss.usermodel.Workbook;
 import com.java.main.bringer.ExcelBringer;
 
 public class JongMokService {
+	private static Map<String,String> map = new HashMap<String,String>();
 	
 	public static Map<String,String> init(String path){
-		Map<String,String> map = new HashMap<String,String>();
 		
 		try {
 			Workbook workbook = ExcelBringer.getWorkbook(path);
