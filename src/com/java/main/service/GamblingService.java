@@ -14,6 +14,17 @@ public class GamblingService {
 	
 	private static final String SELECT_CODE_AND_DATE_QUERY = "SELECT * FROM T_GAMBLING WHERE CODE = {code} AND DATE = {date}";
 	
+	private static final String UPDATE_QUERY = 
+			"UPDATE T_GAMBLING SET "
+			+ "	GAB = {gab} , "
+			+ "	SIGA = {siga} , "
+			+ " GOGA = {goga} , "
+			+ "	JEO_GA = {jeoGa} , "
+			+ " JONG_GA = {jongGa} , "
+			+ "	AMOUNT = {amount} "
+			+ "WHERE CODE = {code} AND "
+			+ "DATE = {date}";
+	
 	private static final String INSERT_QUERY = 
 			"INSERT INTO T_GAMBLING ("
 			+ "CODE , DATE , GAB , "
@@ -27,7 +38,7 @@ public class GamblingService {
 	public void save(Gambling gb){
 		try {
 			Connection conn = MyConnection.getConnection();
-			boolean isGabling = false ; 
+			boolean isUpdate = false ; 
 			
 			String query1 = MyQueryMapper.basicQueryToMappingQuery(SELECT_CODE_AND_DATE_QUERY, gb);
 			System.out.println(query1);
@@ -35,17 +46,20 @@ public class GamblingService {
 			Statement stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(query1);
 			if ( rs.next() ) { 
-				isGabling = true ; 
+				isUpdate = true ; 
 			}
 			
-			if ( !isGabling ) { 
-				String query2 = MyQueryMapper.basicQueryToMappingQuery(INSERT_QUERY, gb);
-				System.out.println(query2);
-				
-				PreparedStatement pstmt = conn.prepareStatement(query2);
-				pstmt.executeUpdate();
-				pstmt.close();
+			String query2 = null ; 
+			if ( !isUpdate ) { 
+				query2 = MyQueryMapper.basicQueryToMappingQuery(INSERT_QUERY, gb);
+			} else { 
+				query2 = MyQueryMapper.basicQueryToMappingQuery(UPDATE_QUERY, gb); 
 			}
+			System.out.println(query2);
+			
+			PreparedStatement pstmt = conn.prepareStatement(query2);
+			pstmt.executeUpdate();
+			pstmt.close();
 			
 		} catch (Exception e) {
 			e.printStackTrace();

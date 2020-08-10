@@ -21,15 +21,16 @@ public class MyConnection {
 	}
 	
 	private Connection getConn() {
-		if ( conn == null ) { 
-			try {
+		try {
+			if ( conn == null || conn.isClosed() ) { 
 				Class.forName("com.mysql.jdbc.Driver");
 			
 				String url = "jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC";
 				conn = DriverManager.getConnection(url,"root","4235");
-			} catch (Exception e) {
-				e.printStackTrace();
+				conn.setAutoCommit(true);
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return this.conn ; 
 	}

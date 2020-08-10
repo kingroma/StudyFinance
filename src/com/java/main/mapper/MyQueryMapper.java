@@ -24,18 +24,19 @@ public class MyQueryMapper {
 					String methodName = "get" + key.toUpperCase().charAt(0) + key.substring(1,key.length());
 					
 					Object value = entity.getClass().getDeclaredMethod(methodName).invoke(entity, null);
-					String className = value.getClass().getSimpleName();
-					String replace = null ; 
-					
-					switch(className) {
-					case "String" : 
-						replace = "'" + value + "'";
-						break;
-					default :
-						replace = (String)value;
-						break;
+					String replace = "null" ; 
+					if ( value != null ) {
+						String className = value.getClass().getSimpleName();
+						switch(className) {
+						case "String" : 
+							if ( value != null )
+								replace = "'" + ((String)value).replaceAll("\'", "\"") + "'";
+							break;
+						default :
+							replace = (String)value;
+							break;
+						}
 					}
-					
 					q = q.replace(str, replace);
 				}
 				

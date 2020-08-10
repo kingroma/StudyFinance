@@ -12,7 +12,9 @@ import com.java.main.domain.Gambling;
 
 // https://finance.naver.com/item/sise_day.nhn?page=1&code=005930
 public class ResentDataThread extends Thread{
-	private static final String URL = "https://finance.naver.com/item/sise_day.nhn?page=1&code=";
+	private static final String WEEK_URL = "https://finance.naver.com/item/sise_day.nhn?page=1&code=";
+	
+	private static final String TODAY_URL = "https://finance.naver.com/item/main.nhn?code=";
 	
 	private String code = null ; 
 	
@@ -24,8 +26,13 @@ public class ResentDataThread extends Thread{
 	
 	@Override
 	public void run() {
+		weekData();	
+		todayData();
+	}
+	
+	private void weekData() {
 		try {
-			Document doc = HttpBringer.bringDocument(URL + code);
+			Document doc = HttpBringer.bringDocument(WEEK_URL + code);
 			Elements es = doc.getElementsByTag("table");
 			Element table = es.get(0);
 			Element tbody = table.children().get(0);
@@ -60,8 +67,46 @@ public class ResentDataThread extends Thread{
 		}
 	}
 	
+	private void todayData() {
+		// https://finance.naver.com/item/main.nhn?code=005930
+		Gambling g = new Gambling();
+		g.setCode(code);
+		try {
+			Document doc = HttpBringer.bringDocument(TODAY_URL + code);
+			// today
+			Elements elements = doc.getElementsByClass("today");
+			Element e = elements.get(0);
+			
+			Elements blinds = e.getElementsByClass("blind");
+			g.setJongGa(_replace(blinds.get(0).text()));
+			g.setGab(_replace(blinds.get(1).text()));
+			
+			// no_info
+			elements = doc.getElementsByClass("no_info");
+			e = elements.get(0);
+			
+			blinds = e.getElementsByClass("blind");
+			g.setGoga(_replace(blinds.get(1).text()));
+			g.setAmount(_replace(blinds.get(3).text()));
+			g.setSiga(_replace(blinds.get(4).text()));
+			g.setJeoGa(_replace(blinds.get(5).text()));
+			
+			
+			e = doc.getElementById("time");
+			g.setDate(_replace(doc.getElementById("time").text().substring(0,10)));
+			
+			System.out.println(g);
+			gs.save(g);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	private String _replace(String str){
-		return str.replaceAll(",", "").replaceAll("\\.", "");
+		if ( str != null ) {
+			str = str.replaceAll(",", "").replaceAll("\\.", "");
+		}
+		return str;
 	}
 	
 }
